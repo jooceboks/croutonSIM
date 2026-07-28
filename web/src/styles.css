@@ -1,0 +1,400 @@
+:root {
+  --cream: #f4ecdd; /* page background */
+  --card: #fbf6ec; /* panels */
+  --ink: #3a2a1d; /* dark brown text */
+  --muted: #94816c; /* secondary brown/taupe */
+  --line: #e6dcc8; /* warm borders / gridlines */
+  --accent: #bf5a2c; /* terracotta */
+  --accent-soft: #e7d8c6;
+  --label-w: 150px;
+
+  --round: "Baloo 2", ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui,
+    sans-serif;
+  --body: "Nunito", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--body);
+}
+
+.loading {
+  padding: 3rem;
+  color: var(--muted);
+  font-family: var(--round);
+}
+
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 22px 56px;
+}
+
+/* header */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.titles {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titles h1 {
+  margin: 0;
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: -0.01em;
+}
+
+.sub {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.stats {
+  display: flex;
+  gap: 26px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat .num {
+  font-family: var(--round);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.stat .lbl {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* controls row: scrubber + view toggle. Sticky so it stays reachable while scrolling. */
+.controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 14px 0 12px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--cream);
+}
+
+.scrubber {
+  flex: 1;
+}
+
+.scrubber input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.scrubline {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.asof {
+  font-family: var(--round);
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.caption {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.viewtoggle {
+  display: inline-flex;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--round);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* stage */
+.stage {
+  margin-top: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  overflow-x: auto;
+}
+
+/* map view: a fixed-height box. The SVG scales to fit inside it (preserveAspectRatio),
+   so the map grows and shrinks with the org instead of stretching the page. */
+.stage-map {
+  height: 68vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stage-map .orgmap {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- split view (log + state) ---------- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+@media (max-width: 720px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel-title {
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* left: the event log */
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 58vh;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+/* thin, slightly visible scrollbars so it reads as scrollable */
+.log,
+.snapshot {
+  scrollbar-width: thin; /* firefox */
+  scrollbar-color: var(--muted) transparent;
+}
+
+.log::-webkit-scrollbar,
+.snapshot::-webkit-scrollbar {
+  width: 8px;
+}
+
+.log::-webkit-scrollbar-track,
+.snapshot::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.log::-webkit-scrollbar-thumb,
+.snapshot::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 999px;
+  border: 2px solid var(--card); /* inset so it reads as a thin line */
+}
+
+.logitem {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer; /* rows are clickable: jump the scrubber to this event */
+}
+
+.logitem:hover {
+  background: #efe6d5;
+}
+
+.logitem.now {
+  background: var(--accent-soft);
+}
+
+.logitem.future {
+  opacity: 0.33;
+}
+
+.logdate {
+  flex: none;
+  width: 82px;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.logtext {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+/* right: the derived snapshot. Same capped-scroll behavior as the log so the panel
+   never stretches the page as headcount grows. */
+.snapshot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 58vh;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.snaprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 14px;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 7px;
+}
+
+.snaprow span {
+  color: var(--muted);
+}
+
+.snaprow b {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.people-group {
+  margin-top: 10px;
+}
+
+.people-team {
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 4px 0 4px;
+}
+
+.person-item {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 13px;
+  padding: 3px 0;
+}
+
+.person-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+}
+
+.person-item .pn {
+  font-weight: 700;
+}
+
+.person-item .pr {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- org map ---------- */
+.orgmap {
+  display: block;
+}
+
+.link {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+
+.orgnode {
+  fill: #fff;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.orgname {
+  fill: var(--ink);
+  font-family: var(--round);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.orgloc {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.teamname {
+  font-family: var(--round);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.pname {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.prole {
+  fill: var(--muted);
+  font-size: 11px;
+}
+
+.person {
+  animation: pop 240ms ease-out;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

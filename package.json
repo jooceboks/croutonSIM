@@ -1,0 +1,28 @@
+{
+  "name": "crouton-sim",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Organization simulator - MVP 0: in-memory event-sourcing engine.",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "db:migrate": "tsx src/migrate.ts",
+    "seed": "tsx src/seed.ts",
+    "state": "tsx src/showState.ts",
+    "check": "tsx src/check.ts",
+    "serve": "tsx src/server.ts",
+    "test": "tsx --test src/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

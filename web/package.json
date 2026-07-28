@@ -1,0 +1,23 @@
+{
+  "name": "crouton-sim-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MVP 3: React org-structure map over the simulator API.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}
